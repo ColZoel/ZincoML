@@ -1,6 +1,6 @@
 # ZincoML
 This is a brand-new update of the Zinco framework utilizing the foremost in artificial 
-intelligence to read tabular-ize data retained in unstructured images of scanned city directories.
+intelligence to read and tabular-ize data retained in unstructured images of scanned city directories.
 
 ## What is the ML?
 This projects builds on the previous framework by incorporating image segmentation and NLP, in addition to OCR,
