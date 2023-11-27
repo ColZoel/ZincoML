@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="945cf883-b52f-43fc-b31c-9808531721a8" name="Changes" comment="adds tools and pipe">
-      <change beforePath="$PROJECT_DIR$/parsing/build_nlp.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsing/build_nlp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +112,7 @@
       <workItem from="1700943534053" duration="8193000" />
       <workItem from="1700951918616" duration="14735000" />
       <workItem from="1701097495564" duration="87000" />
+      <workItem from="1701127741087" duration="828000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -129,7 +130,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701043652059</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="adds tools and pipe">
+      <option name="closed" value="true" />
+      <created>1701128957891</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1701128957891</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
