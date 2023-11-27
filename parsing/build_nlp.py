@@ -22,3 +22,4 @@ def load_llm(path):
     return spacy.load(path)
 
 
+# Could it be possible to use the LLM integration with pandas AI to parse the text in a series?
