@@ -5,12 +5,15 @@ import os
 from ultralytics import YOLO
 
 
-def predict(model_name, image_path):
+def model(model_name):
+    return YOLO(model_name)
+
+
+def predict(model_object, image_path):
     """
     Predict on new images.
     """
-    model = YOLO(model_name)
-    results = model(image_path)
+    results = model_object(image_path)
     results.print()
     results.save()
 
@@ -26,7 +29,18 @@ def predict_text_fields(model_name, image_path):
         if result['class'] == 'body':
             bodybox = result.boxes.xywh
             print(bodybox)
-            return bodybox
-
-
+            return [image_path, bodybox]
     return None
+
+
+def predict_on_vector(model_name, image_list):
+    """
+    Predict on new images.
+    """
+    model_object = model(model_name)
+    results = model_object(image_list)
+    results.print()
+    results.save()
+
+    return results
+
