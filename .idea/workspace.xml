@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="945cf883-b52f-43fc-b31c-9808531721a8" name="Changes" comment="adds tools and pipe">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ocr/globals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/dirs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/files.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/images.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/parse_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_segmentation/segment.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_segmentation/segment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/ocr.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocr/ocr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/file_hierarchy.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/timers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/timers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zinco.py" beforeDir="false" afterPath="$PROJECT_DIR$/zinco.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,32 +53,33 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;build&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/collinzoeller/PycharmProjects/ZincoML/spatial&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "true",
+    "git-widget-placeholder": "build",
+    "last_opened_file_path": "/Users/collinzoeller/PycharmProjects/ZincoML/ocr",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ocr" />
       <recent name="$PROJECT_DIR$/spatial" />
       <recent name="$PROJECT_DIR$/tools" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/ocr" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/utils" />
       <recent name="$PROJECT_DIR$/ocr" />
     </key>
   </component>
@@ -96,6 +108,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.zinco" />
         <item itemvalue="Python.zinco" />
       </list>
     </recent_temporary>
@@ -164,9 +177,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ocr/ocr.py</url>
+          <url>file://$PROJECT_DIR$/zinco.py</url>
           <line>4</line>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

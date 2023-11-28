@@ -1,18 +1,29 @@
 """
 This module contains the functions for extracting text from an image using Tesseract OCR via Tessercocr.
 """
-
-import gc
 import pandas as pd
-import glob
-from Zs.Alpha.globals import *
-from Zs.Z_modules import *
-from tesserocr import PyTessBaseAPI, RIL, iterate_level, PT, PSM
+from globals import header_re, pagenum
+from tools.timers import *
+from PIL import Image
+from tesserocr import PyTessBaseAPI, RIL, iterate_level, PT
 from Line import Line
 from Column import Column
-# from Zs.Alpha.preprocessor import preprocess  # Fixme: remove preprocessing from ocr since it's not needed anymore
+from utils.dirs import *
+from utils import images
+from multiprocessing import Pool
 
 special_chars_regex = re.compile(r'[\-.*]')
+
+
+def read_annotations(path):
+    """
+    read in the annotations file, if it exists. Can be a Dataframe, csv, parquet, or json file.
+    """
+    if isinstance(path, pd.DataFrame):
+        annotations = path
+
+    annotations = subdirectories(path)[1]
+
 
 
 def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
@@ -186,116 +197,28 @@ def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
     return lines
 
 
-def block_ocr(start, ocr_dir, prepped_dir, change_list, debug=False, rerun=False):
-    '''
-    Runs OCR on all prepped images in the prepped_dir
-    :param start: start time of the program
-    :param temp_dir: directory to store ocr results as parquet files
-    :param prepped_dir: directory containing prepped images
-    :param rerun: if True, rerun OCR on all images
-    :return: list() of OCR time for each page. Saves raw OCR output to temp_dir as parquet files
-    '''
-    with PyTessBaseAPI() as api:
-        page_ocr = []
-        empty = []  # list of pages with no text
-        ocr_changed = []  # list of pages that were rerun
-        size = len(glob.glob(prepped_dir + '/*_prep.jpg'))
+def ocr_task(api, annotation_box, debug=False):  # TODO: add timer
 
-        for ind, filepath in enumerate(sorted(glob.glob(prepped_dir + '/*_prep.jpg'), key=numerical_sort)):
-            filename = filepath.split('/')[-1]
-            current = f'{ind + 1} of {size}'
-            progress_bar(start, filename, ind, current, size, "OCR")
-            name = filename.replace('_prep.jpg', '_raw_ocr.parquet')
-
-            if name not in change_list and not rerun and name in os.listdir(ocr_dir):
-                continue
-
-            ocr_start = time.perf_counter()
-            image = cv2.imread(filepath)
-            lines = organize_lines(api, image, debug)
-
-            if len(lines) == 0:
-                empty.append(filename)
-                continue
-
-            ocr_stop = time.perf_counter()
-            ocr_time = ocr_stop - ocr_start
-            page_ocr.append(ocr_time)
-
-            progress_bar(start, filename, ind, current, size, "OCR")
-
-            image_df = pd.DataFrame(lines)
-
-            image_df.to_parquet(os.path.
-                                join(ocr_dir,
-                                     name), compression='gzip')  # save lines to parquet (smaller, faster than csv)
-            ocr_changed.append(name)
-
-            if ind // 25:  # clear tesseract and cached memory every 25th image
-                api.Clear()
-                gc.collect()
-        else:
-            gc.collect()
-
-        empty_files = '\n'.join(empty)
-        txt = (f'EMPTY IMAGES: {len(empty)}\n'
-               f'{empty_files}')
-        with open(os.path.join(ocr_dir, 'empty_images.txt'), 'w') as f:
-            f.write(txt)
-
-        return page_ocr, ocr_changed  # return list of ocr times for each page and list of pages that were passed
-
-
-def see_ocr(filename, year_city_type_path=None, save=False):
-    ocr = '_raw_ocr.parquet'
-    parse = '_parsed.parquet'
-    prep_image = '_prep.jpg'
-    run_preprocessor = False
-    image_name = None
-
-    if len(filename.split('/')) > 1:  # if pathlike object
-        image_name = filename.split('/')[-1]
-        year_city_type_path = filename.replace(image_name, '')
-        filename = filename.split('/')[-1]
-
-    if ocr in filename:
-        # image_name = filename.replace(ocr, prep_image)
-        image_df = pd.read_parquet(os.path.join(year_city_type_path, filename))
-        return image_df
-
-    elif parse in filename:
-        image_name = filename.replace(parse, prep_image)
-    elif prep_image in filename:
-        image_name = filename
-    elif filename.split('.')[-1] == 'jpg':
-        run_preprocessor = True
-        image_name = filename.replace('.jpg', prep_image)
-    else:
-        raise KeyError(f"filename={filename} is not a valid filename")
-
-    if image_name is None:
-        raise KeyError(f"need to specify year_city_type_path or filename={filename} must be a pathlike object")
-
-    if year_city_type_path is None:
-        raise KeyError(f"need to specify year_city_type_path or filename={filename} must be a pathlike object")
-    dirs = subdirectories(year_city_type_path)
-
-    if run_preprocessor:
-        preprocess(year_city_type_path, filename)
-
-    prepped_dir = dirs[2]
-
-    image_filepath = os.path.join(prepped_dir, image_name)
-    image = cv2.imread(image_filepath)
-
-    lines = organize_lines(PyTessBaseAPI(), image, True)
-
+    image_path, x, y, w, h = annotation_box
+    image = images.box(annotation_box)
+    lines = organize_lines(api, image, debug)
+    if len(lines) == 0:
+        return None
+    ocr_dir = subdirectories(image_path)[3]
     image_df = pd.DataFrame(lines)
-
-    if save:
-        name = image_name.replace('.jpg', '_raw_ocr.parquet')
-        image_df.to_parquet(os.path.
-                            join(dirs[3],
-                                 name), compression='gzip')
+    image_df.to_parquet(os.path.join(ocr_dir, f'{file_stem(image_path)}.parquet'), compression='gzip')
 
     return image_df
+
+
+def map_ocr(annotation_boxes, debug=False, cores=6):
+    with PyTessBaseAPI as api:
+        with Pool(cores) as p:
+            dfs = p.startmap(ocr_task, [(api, annotation_box, debug) for annotation_box in annotation_boxes])
+            p.close()
+            p.join()
+
+    return dfs
+
+
+

@@ -42,3 +42,14 @@ def short_step(start, step_str, i, total_steps):
     sys.stdout.flush()
 
     return
+
+
+def timeit():
+    return time.perf_counter()
+
+
+def process_end(start):
+    end = time.perf_counter()
+    duration = end - start
+    return duration
+
