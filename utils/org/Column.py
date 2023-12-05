@@ -1,10 +1,8 @@
 import cv2
 import numpy as np
 from PIL import Image
-
-from Zs.Z_modules import insertion_sort
-from Zs.Alpha.Line import Line
-from Zs.Z_modules import hsv_to_rgb
+from utils.org import Line
+from utils.images import hsv_to_rgb, insertion_sort
 
 
 class Column:
