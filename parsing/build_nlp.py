@@ -3,11 +3,7 @@ Use pretrained LLM from Spacy and Palm AI to extract text
 """
 import spacy
 from spacy_llm.util import assemble
-from os import getenv
 import os
-from dotenv import load_dotenv
-load_dotenv()
-palm_key = getenv("PALM_API_KEY")
 
 
 def build_new_llm(name):
