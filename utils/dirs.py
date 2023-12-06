@@ -24,6 +24,8 @@ such that the structure is as follows:
 
 import os
 import glob
+
+import pandas as pd
 import yaml
 import re
 from pandas import read_excel, read_csv, read_stata, read_parquet, read_json, read_feather, read_pickle
@@ -102,11 +104,9 @@ def subdirectories(year_city_type_path):
         year_city_type_path = year_city_type_path[:-1]
     save_dir = year_city_type_path + "_out"
     debug_dir = os.path.join(save_dir, 'debug')
-    # prepped_dir = os.path.join(debug_dir, 'preprocessed')
     temp_dir = os.path.join(debug_dir, 'temp')
     annotate_dir = os.path.join(debug_dir, '1')
     ocr_dir = os.path.join(temp_dir, '2')
-    # segment_dir = os.path.join(temp_dir, '3')
     parse_dir = os.path.join(temp_dir, '3')
 
     dirs = (save_dir, debug_dir, temp_dir, annotate_dir, ocr_dir, parse_dir)
@@ -128,6 +128,7 @@ def save_paths(year_city_type_path):
     debug_dir = subdirectories(year_city_type_path)[1]
     save_dir = subdirectories(year_city_type_path)[0]
     file = file_stem(year_city_type_path)
+
     feather_save_path = (os.path.join(debug_dir, f'{file}.feather'))  # debug incase csv fails
     csv_save_path = os.path.join(save_dir, f'{file}.csv')
     dta_save_path = os.path.join(save_dir, f'{file}.dta')
@@ -155,9 +156,18 @@ def read_any(path):
         return read_excel(path)
     elif path.endswith('.pkl'):
         return read_pickle(path)
+    elif isinstance(path, pd.DataFrame):
+        pass
     else:
         raise ValueError(f'Invalid file type: {path}')
 
 
+def recent_model(dir_):
+    """
+    Returns the most recent model in a directory
+    """
+    files = glob.glob(os.path.join(dir_, '*.onnx'))
+    files.sort(key=os.path.getmtime)
+    return files[-1]
 
 
