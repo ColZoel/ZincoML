@@ -1,6 +1,11 @@
 
 
-input_images: /path/to/images
-horizontal_process: False  # Is true to run the pipeline horizontally (one image at a time: Obj Detec -> OCR -> NER)
-object_detection: True  # Is true to run object detection, else searches for object detection results in the input_images folder to run OCR
-ocr: True  # Is true to run OCR, else searches for OCR results in the input_images folder to run NER
+input_images: /Users/collinzoeller/city_directories/AZ/test
+horizontal_process: False  # Is true to run the pipeline horizontally (one image at a time: OD -> OCR -> NER)
+cores: 4  # Number of cores to use for multiprocessing
+output_type: "csv"  # Output type: csv, dta, parquet or None. If None, only a feather file is saved
+debug: False  # Is true to run in debug mode
+unique_vars:
+  - "POSITION"
+  - "OCCUPATION"
+  - "MILITARY BRANCH"
