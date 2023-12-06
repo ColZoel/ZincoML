@@ -4,18 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="945cf883-b52f-43fc-b31c-9808531721a8" name="Changes" comment="adds tools and pipe">
-      <change afterPath="$PROJECT_DIR$/ocr/globals.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/dirs.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/files.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/images.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/parse_config.py" afterDir="false" />
+    <list default="true" id="945cf883-b52f-43fc-b31c-9808531721a8" name="Changes" comment="pipeline fixes">
+      <change afterPath="$PROJECT_DIR$/image_segmentation/train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipe.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scrtch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ZincoML.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ZincoML.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/image_segmentation/segment.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_segmentation/segment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_segmentation/build_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_segmentation/get_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_segmentation/get_roboflow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_segmentation/segment.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_segmentation/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/Column.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/org/Column.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/Line.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/org/Line.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/deskew.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/org/deskew.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/globals.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/globals.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ocr/ocr.py" beforeDir="false" afterPath="$PROJECT_DIR$/ocr/ocr.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr/read_box.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsing/build_nlp.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsing/build_nlp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsing/config.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/parsing/config.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsing/examples.yml" beforeDir="false" afterPath="$PROJECT_DIR$/parsing/examples.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parsing/parse.py" beforeDir="false" afterPath="$PROJECT_DIR$/parsing/parser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/file_hierarchy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/timers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/timers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/dirs.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/dirs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/parse_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/zinco.py" beforeDir="false" afterPath="$PROJECT_DIR$/zinco.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,24 +66,24 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "true",
-    "git-widget-placeholder": "build",
-    "last_opened_file_path": "/Users/collinzoeller/PycharmProjects/ZincoML/ocr",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;build&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/collinzoeller/PycharmProjects/ZincoML/ocr&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Language Defaults&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/ocr" />
@@ -80,10 +93,101 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/utils" />
-      <recent name="$PROJECT_DIR$/ocr" />
+      <recent name="$PROJECT_DIR$/ocr/org" />
+      <recent name="$PROJECT_DIR$/image_segmentation/yolov8/weights" />
+      <recent name="$PROJECT_DIR$/image_segmentation/yolov8" />
+      <recent name="$PROJECT_DIR$/image_segmentation/runs/detect/debug/weights" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.zinco">
+    <configuration name="ocr" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZincoML" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ocr" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ocr/ocr.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="predict" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZincoML" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/image_segmentation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/image_segmentation/predict.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scrtch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZincoML" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scrtch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ZincoML" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/image_segmentation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/image_segmentation/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="zinco" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ZincoML" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -109,7 +213,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.zinco" />
-        <item itemvalue="Python.zinco" />
+        <item itemvalue="Python.predict" />
+        <item itemvalue="Python.ocr" />
+        <item itemvalue="Python.scrtch" />
+        <item itemvalue="Python.train" />
       </list>
     </recent_temporary>
   </component>
@@ -126,6 +233,13 @@
       <workItem from="1700951918616" duration="14735000" />
       <workItem from="1701097495564" duration="87000" />
       <workItem from="1701127741087" duration="828000" />
+      <workItem from="1701138461068" duration="9914000" />
+      <workItem from="1701224351950" duration="2097000" />
+      <workItem from="1701388496012" duration="13742000" />
+      <workItem from="1701483806551" duration="2350000" />
+      <workItem from="1701556722417" duration="24524000" />
+      <workItem from="1701751046705" duration="3526000" />
+      <workItem from="1701789999933" duration="7000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -151,7 +265,79 @@
       <option name="project" value="LOCAL" />
       <updated>1701128957891</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="adds images.py">
+      <option name="closed" value="true" />
+      <created>1701137315552</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137315552</updated>
+    </task>
+    <task id="LOCAL-00005" summary="adds directory management utilities">
+      <option name="closed" value="true" />
+      <created>1701137337194</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137337194</updated>
+    </task>
+    <task id="LOCAL-00006" summary="rename">
+      <option name="closed" value="true" />
+      <created>1701137378433</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137378433</updated>
+    </task>
+    <task id="LOCAL-00007" summary="adds globals.py">
+      <option name="closed" value="true" />
+      <created>1701137392893</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137392893</updated>
+    </task>
+    <task id="LOCAL-00008" summary="native multiprocessing">
+      <option name="closed" value="true" />
+      <created>1701137409944</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137409944</updated>
+    </task>
+    <task id="LOCAL-00009" summary="config utility">
+      <option name="closed" value="true" />
+      <created>1701137422894</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137422894</updated>
+    </task>
+    <task id="LOCAL-00010" summary="timer tools">
+      <option name="closed" value="true" />
+      <created>1701137436171</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137436171</updated>
+    </task>
+    <task id="LOCAL-00011" summary="pipeline fixes">
+      <option name="closed" value="true" />
+      <created>1701137485595</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137485595</updated>
+    </task>
+    <task id="LOCAL-00012" summary="pipeline fixes">
+      <option name="closed" value="true" />
+      <created>1701137529421</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1701137529421</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,20 +357,62 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="adds tools and pipe" />
-    <option name="LAST_COMMIT_MESSAGE" value="adds tools and pipe" />
+    <MESSAGE value="adds images.py" />
+    <MESSAGE value="adds directory management utilities" />
+    <MESSAGE value="rename" />
+    <MESSAGE value="adds globals.py" />
+    <MESSAGE value="native multiprocessing" />
+    <MESSAGE value="config utility" />
+    <MESSAGE value="timer tools" />
+    <MESSAGE value="pipeline fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="pipeline fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/zinco.py</url>
-          <line>4</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/image_segmentation/get_roboflow.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/image_segmentation/train.py</url>
+          <line>38</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/image_segmentation/train.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scrtch.py</url>
+          <line>3</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ocr/ocr.py</url>
+          <line>212</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ocr/ocr.py</url>
+          <line>198</line>
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/image_segmentation/predict.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ZincoML$zinco.coverage" NAME="zinco Coverage Results" MODIFIED="1701041863026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ZincoML$scrtch.coverage" NAME="scrtch Coverage Results" MODIFIED="1701743483147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ZincoML$ocr.coverage" NAME="ocr Coverage Results" MODIFIED="1701748617138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/ocr" />
+    <SUITE FILE_PATH="coverage/ZincoML$zinco.coverage" NAME="zinco Coverage Results" MODIFIED="1701753955163" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ZincoML$predict.coverage" NAME="predict Coverage Results" MODIFIED="1701751062843" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/image_segmentation" />
+    <SUITE FILE_PATH="coverage/ZincoML$train.coverage" NAME="train Coverage Results" MODIFIED="1701225287967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/image_segmentation" />
   </component>
 </project>
