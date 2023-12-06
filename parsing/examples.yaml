@@ -1,0 +1,91 @@
+- text: A DIA Personnel James J Wood Area V-Pres temp emp agcy 259 Monroe Av
+  spans:
+    - text: A DIA Personnel
+      is_entity: true
+      label: ORGANIZATION
+      reason: is an organization
+    - text: James J Wood
+      is_entity: true
+      label: PERSON
+      reason: is a person's name, first, middle initial and last name
+    - text: Area V-Pres
+      is_entity: true
+      label: POSITION
+      reason: is a position title
+    - text: temp emp agcy
+      is_entity: true
+      label: OCCUPATION
+      reason: is an occupation
+    - text: 259 Monroe Av
+      is_entity: true
+      label: ADDRESS
+      reason: is an street address
+
+- text: ACCURA INDUSTRIES (Ali Karahan) CNC Turning Specialist Prototype And Production 350 Whitney St 14606) Tel (716) 458-0060
+  spans:
+    - text: ACCURA INDUSTRIES
+      is_entity: true
+      label: ORGANIZATION
+      reason: is an organization
+    - text: Ali Karahan
+      is_entity: true
+      label: PERSON
+      reason: is a person's name, first and last name
+    - text: CNC Turning Specialist Prototype And Production
+      is_entity: true
+      label: POSITION
+      reason: is a position title
+    - text: 350 Whitney St 14606
+      is_entity: true
+      label: ADDRESS
+      reason: is an street address with zip code
+    - text: (716) 458-0060
+      is_entity: true
+      label: TELEPHONE
+      reason: is a telephone number
+- text: \” Pearl retd h399 Colvin St Apt 304
+  spans:
+    - text: \" Pearl
+      is_entity: true
+      label: PERSON
+      reason: is a person's name, first name with leading quote
+    - text: retd
+      is_entity: true
+      label: OCCUPATION
+      reason: is an occupation
+    - text: h399 Colvin St Apt 304
+      is_entity: true
+      label: ADDRESS
+      reason: is an street address
+- text: AL SIGL CENTER FOR oo AGENICES DANIEL M MEYERS EXECUTIVE DIRECTOR WILLIAM G VONBERG PRESIDENT HOUSING EIGHT AGENCIES PROVIDING SERVICE TO THE HANDICAPPED ASSOCIATION FOR RETARDED CITIZENS TELEPHONE 271-0660
+  spans:
+    - text: AL SIGL CENTER FOR oo AGENICES
+      is_entity: true
+      label: ORGANIZATION
+      reason: is an organization
+    - text: DANIEL M MEYERS
+      is_entity: true
+      label: PERSON
+      reason: is a person's name, first, middle initial and last name
+    - text: EXECUTIVE DIRECTOR
+      is_entity: true
+      label: POSITION
+      reason: is a position title
+    - text: WILLIAM G VONBERG
+      is_entity: true
+      label: PERSON
+      reason: is a person's name, first, middle initial and last name
+    - text: PRESIDENT
+      is_entity: true
+      label: POSITION
+      reason: is a position title
+    - text: PROVIDING SERVICE TO THE HANDICAPPED ASSOCIATION FOR RETARDED CITIZENS
+      is_entity: false
+      label: ==NONE==
+      reason: desription of the organization
+    - text: TELEPHONE 271-0660
+      is_entity: true
+      label: TELEPHONE
+      reason: is a telephone number
+
+
