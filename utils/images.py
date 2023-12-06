@@ -44,7 +44,32 @@ def restrict(x, y, w, h, image):
     return image[y:y + h, x:x + w]
 
 
-def box(annotation_box):
-    image_path, x, y, w, h = annotation_box
+def box(image_path, x, y, w, h):
     image = restrict(x, y, w, h, read(image_path))
     return image
+
+
+def hsv_to_rgb(h, s, v):
+    if s == 0.0: v *= 255; return (v, v, v)
+    i = int(h * 6.)  # XXX assume int() truncates!
+    f = (h * 6.) - i;
+    p, q, t = int(255 * (v * (1. - s))), int(255 * (v * (1. - s * f))), int(255 * (v * (1. - s * (1. - f))));
+    v *= 255;
+    i %= 6
+    if i == 0: return (v, t, p)
+    if i == 1: return (q, v, p)
+    if i == 2: return (p, v, t)
+    if i == 3: return (p, q, v)
+    if i == 4: return (t, p, v)
+    if i == 5: return (v, p, q)
+
+
+def insertion_sort(arr):
+    for idx in range(1, len(arr)):
+        scan = idx
+        while scan > 0 and arr[scan] < arr[scan-1]:
+            # print(f"Switched {arr[scan]} and {arr[scan-1]}")
+            arr[scan - 1], arr[scan] = arr[scan], arr[scan - 1]
+            scan -= 1
+    return arr
+
