@@ -1,29 +1,17 @@
 """
 This module contains the functions for extracting text from an image using Tesseract OCR via Tessercocr.
 """
-import pandas as pd
-from globals import header_re, pagenum
+from utils.globals import header_re, pagenum
 from tools.timers import *
 from PIL import Image
 from tesserocr import PyTessBaseAPI, RIL, iterate_level, PT
-from Line import Line
-from Column import Column
+from utils.org.Line import Line
+from utils.org.Column import Column
 from utils.dirs import *
 from utils import images
 from multiprocessing import Pool
 
 special_chars_regex = re.compile(r'[\-.*]')
-
-
-def read_annotations(path):
-    """
-    read in the annotations file, if it exists. Can be a Dataframe, csv, parquet, or json file.
-    """
-    if isinstance(path, pd.DataFrame):
-        annotations = path
-
-    annotations = subdirectories(path)[1]
-
 
 
 def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
@@ -197,28 +185,46 @@ def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
     return lines
 
 
-def ocr_task(api, annotation_box, debug=False):  # TODO: add timer
-
-    image_path, x, y, w, h = annotation_box
-    image = images.box(annotation_box)
-    lines = organize_lines(api, image, debug)
-    if len(lines) == 0:
-        return None
-    ocr_dir = subdirectories(image_path)[3]
-    image_df = pd.DataFrame(lines)
-    image_df.to_parquet(os.path.join(ocr_dir, f'{file_stem(image_path)}.parquet'), compression='gzip')
+def ocr_task(image_path, x,y,w,h):  # TODO: add timer
+    """
+    OCR per image task
+    """
+    with PyTessBaseAPI() as api:
+        image = images.box(image_path, x,y,w,h)
+        lines = organize_lines(api, image, debug=False)
+        if len(lines) == 0:
+            return None
+        ocr_dir = subdirectories(image_path)[4]
+        image_df = pd.DataFrame(lines)
+        image_df.to_parquet(os.path.join(ocr_dir, f'{file_stem(image_path)}.parquet'), compression='gzip')
 
     return image_df
 
 
 def map_ocr(annotation_boxes, debug=False, cores=6):
-    with PyTessBaseAPI as api:
-        with Pool(cores) as p:
-            dfs = p.startmap(ocr_task, [(api, annotation_box, debug) for annotation_box in annotation_boxes])
-            p.close()
-            p.join()
+    """
+    Runs OCR in parallel on a list of images and bounding boxes. Returns a list of dataframes.
+    """
+    image_paths = [annotation_box[0] for annotation_box in annotation_boxes]
+    annotations = [annotation_box[1:] for annotation_box in annotation_boxes]
+
+    with Pool(cores) as p:
+        dfs = p.starmap(ocr_task, [(image_path, annotations) for image_path, annotations in zip(image_paths, annotations)])
+        p.close()
+        p.join()
 
     return dfs
+
+
+def save_aggregate(dfs, year_city_type_path):
+    """
+    Saves the aggregate dataframe to parquet
+    """
+    ocr_dir = subdirectories(year_city_type_path)[4]
+    aggregate_df = pd.concat(dfs)
+    aggregate_df.to_parquet(os.path.join(ocr_dir,
+                                         f'{file_stem(year_city_type_path)}_aggregate.parquet'), compression='gzip')
+    return aggregate_df
 
 
 
