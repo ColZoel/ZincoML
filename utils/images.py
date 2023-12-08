@@ -5,6 +5,17 @@ Functions for image processing
 
 import cv2
 from PIL import Image
+import numpy as np
+from tesserocr import PyTessBaseAPI
+
+
+# Colors
+red = (100, 50, 200)
+darkblue = (255, 100, 0)
+green = (0, 255, 0)
+blue = (255, 0, 0)
+yellow = (0, 255, 255)
+white = (255, 255, 255)
 
 
 def display(image, debug=False, wait=0, window_size=(600, 1000)):
@@ -32,7 +43,7 @@ def read(path, engine='cv2'):
         raise ValueError(f'Invalid engine: {engine}')
 
 
-def restrict(x, y, w, h, image):
+def restrict(x, y, x2, y2, image):
     """
     :param x: x coordinate of top left corner of box
     :param y: y coordinate of top left corner of box
@@ -41,11 +52,60 @@ def restrict(x, y, w, h, image):
     :param image: image to process
     :return: image cropped to box
     """
-    return image[y:y + h, x:x + w]
+    y = np.floor(y).astype(int)
+    x = np.floor(x).astype(int)
+    y2 = np.ceil(y2).astype(int)
+    x2 = np.ceil(x2).astype(int)
+    image = image[y:y2, x:x2]
+    # display(image, debug=True)
+    return image
 
 
-def box(image_path, x, y, w, h):
-    image = restrict(x, y, w, h, read(image_path))
+def orient_detect(api, cv2_image, conf_thresh=50, debug=False):
+    """
+    Check if image is upside down by running middle third of image thorugh
+    the OCR and measuring the confidence. Rotates if confidence is low (indicating
+    gibberish).
+    :param cv2_image: full CV2 image after processing
+    :param conf_thresh: int() percentage for confidence threshold under which the image is rotated
+    :param debug: whether to display text and debug windows
+    :return: cv2 image
+    """
+    # check orientation
+    h, w = cv2_image.shape[:2]
+    orientation_check_image = cv2_image[h // 3:2*h//3, 2*h//5:4*h//5]  # only look at middle third of image
+    try:
+        orientation_pil = Image.fromarray(orientation_check_image)
+        api.SetImage(orientation_pil)
+        api.Recognize()
+    except:
+        pass
+        return cv2_image
+    # if image in sideways, rotate 90-degrees
+    if w > h:
+        cv2_image = cv2.rotate(cv2_image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+
+    # rotate if bad text
+    if api.MeanTextConf() < conf_thresh:
+        cv2_image = cv2.rotate(cv2_image, cv2.ROTATE_180)
+
+    if debug:
+        print('\nText conf:', api.MeanTextConf())
+        display(cv2_image, debug)
+
+    api.Clear()
+    return cv2_image
+
+
+def pad(image, thickness=150):
+    """
+    Crop image to contour and pad with white space.
+    :param image: CV2 image
+    :param thickness: padding to add to contour
+    :return: cropped and padded image
+    """
+    image = cv2.copyMakeBorder(image, thickness, thickness, thickness, thickness, cv2.BORDER_CONSTANT, value=white)
+
     return image
 
 
@@ -72,4 +132,12 @@ def insertion_sort(arr):
             arr[scan - 1], arr[scan] = arr[scan], arr[scan - 1]
             scan -= 1
     return arr
+
+
+def box(api, image_path, x, y, w, h):
+    image = restrict(x, y, w, h, read(image_path))
+    image = orient_detect(api, image)
+    image = pad(image)
+    image = Image.fromarray(image)
+    return image
 
