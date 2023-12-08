@@ -3,18 +3,17 @@ This module contains the functions for extracting text from an image using Tesse
 """
 from utils.globals import header_re, pagenum
 from tools.timers import *
-from PIL import Image
 from tesserocr import PyTessBaseAPI, RIL, iterate_level, PT
 from utils.org.Line import Line
 from utils.org.Column import Column
 from utils.dirs import *
-from utils import images
 from multiprocessing import Pool
-
+from utils import images
 special_chars_regex = re.compile(r'[\-.*]')
 
+# Todo: Check word confidence maps for ellipses -- could drop really low confidence "words" that are actually ellipses
 
-def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
+def organize_lines(api, image, debug=False):
     """
         APPLY OCR TO IMAGE AND ORGANIZES OUTPUT INTO RECORDS AND COLUMNS
 
@@ -33,14 +32,14 @@ def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
         }
     """
     ocr_start = time.perf_counter()
-
     file_loc = os.path.dirname(os.path.realpath(__file__))  # Gets location of this script
     api.SetVariable("tessedit_char_whitelist",
                     open(os.path.join(file_loc, "whitelist.txt")).read().strip())  # sets allowed chars
-
-    image = Image.fromarray(image)
-    api.SetImage(image)
-    api.Recognize()  # bulk of time, actual OCR
+    api.SetVariable("user_patterns_file", os.path.join(file_loc, "patterns.txt"))  # sets allowed patterns
+    api.SetVariable('language_model_penalty_non_freq_dict_word', '0.4')
+    api.SetVariable('language_model_penalty_non_dict_word', '0.2')  # sets penalty for non-dictionary words
+    db = api.SetImage(image)
+    rec = api.Recognize()  # bulk of time, actual OCR
 
     ocr_stop = time.perf_counter()
     ocr_time = ocr_stop - ocr_start
@@ -185,33 +184,34 @@ def organize_lines(api: PyTessBaseAPI, image: Image, debug=False) -> list[dict]:
     return lines
 
 
-def ocr_task(image_path, x,y,w,h):  # TODO: add timer
+def ocr_task(image_path, x, y, x2, y2):  # TODO: add timer
     """
     OCR per image task
     """
     with PyTessBaseAPI() as api:
-        image = images.box(image_path, x,y,w,h)
-        lines = organize_lines(api, image, debug=False)
+        short_step(timeit(), 'Load', 0, 3)
+        image = images.box(api, image_path, x, y, x2, y2)
+        short_step(timeit(), 'OCR', 1, 3)
+        lines = organize_lines(api=api, image=image, debug=False)
         if len(lines) == 0:
             return None
+        short_step(timeit(), 'Save Result', 1, 3)
         ocr_dir = subdirectories(image_path)[4]
-        image_df = pd.DataFrame(lines)
+        image_df = pd.DataFrame(lines).drop(columns=['left', 'top', 'right', 'bottom'])
         image_df.to_parquet(os.path.join(ocr_dir, f'{file_stem(image_path)}.parquet'), compression='gzip')
 
     return image_df
 
 
-def map_ocr(annotation_boxes, debug=False, cores=6):
+def map_ocr(annotation_boxes, cores=6):
     """
     Runs OCR in parallel on a list of images and bounding boxes. Returns a list of dataframes.
     """
-    image_paths = [annotation_box[0] for annotation_box in annotation_boxes]
-    annotations = [annotation_box[1:] for annotation_box in annotation_boxes]
-
+    annotation_boxes = list(map(tuple, annotation_boxes))
     with Pool(cores) as p:
-        dfs = p.starmap(ocr_task, [(image_path, annotations) for image_path, annotations in zip(image_paths, annotations)])
-        p.close()
-        p.join()
+        dfs = p.starmap(ocr_task, annotation_boxes)
+    p.close()
+    p.join()
 
     return dfs
 
