@@ -8,6 +8,8 @@ load_dotenv()
 palm_key = getenv("PALM_API_KEY")
 os.environ["PALM_API_KEY"] = palm_key
 
+
+# Todo: Add llm_config and llm_examples to parser module to avoid loading in multiprocesing
 root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 llm_config = os.path.join(root, 'parsing', 'config.cfg')
 llm_examples = os.path.join(root, 'parsing', 'examples.yaml')
