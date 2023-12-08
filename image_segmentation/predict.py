@@ -4,10 +4,8 @@ Used tuned model to predict on new images.
 import os
 from ultralytics import YOLO
 import torch
-import pandas as pd
 from utils.dirs import recent_model
-from utils.config import load_config
-import numpy as np
+
 
 def to_gpu(model):
     if not torch.backends.mps.is_available():
@@ -31,10 +29,20 @@ def predict_text_fields(image_path):
     model_path = get_model_path()
     model = YOLO(model_path,
                  task='detect')
-    results = model.predict('/Users/collinzoeller/city_directories/AZ/1994_ROC_AZ/1994_ROC_1__0339.jpg',
-                            stream=True, conf=0.5, classes=1, device='mps')
+    results = model.predict(image_path,
+                            stream=True, conf=0.5, device='mps')
 
-    results_list = [[r.path] + r.boxes.xywh[0].tolist() for r in results]
+    results_list = []
+    for r in results:
+        try:
+            bodyidx = r.boxes.cls.tolist().index(1)
+        except:
+            print(f'{os.path.basename(r.path)}:  No body class in image.')
+            continue
+        boxes = r.boxes.xyxy.tolist()[bodyidx]
+        path = r.path
+        results_list += [[path] + boxes]
+
     return results_list
 
 
@@ -46,7 +54,3 @@ def get_model_path():
     else:
         raise ValueError(f'Bad file path. The model path {model_path} should exist, but does not.')
     return model_path
-
-
-# predict_text_fields('/Users/collinzoeller/PycharmProjects/ZincoML/image_segmentation/yolov8/weights/8v1.onnx',
-#                     '/Users/collinzoeller/city_directories/AZ/test')
