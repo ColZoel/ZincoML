@@ -102,7 +102,7 @@ def subdirectories(year_city_type_path):
     """
     if year_city_type_path[-1] == "/":
         year_city_type_path = year_city_type_path[:-1]
-    save_dir = year_city_type_path + "_out"
+    save_dir = year_city_type_path.split(".")[0] + "_out"
     debug_dir = os.path.join(save_dir, 'debug')
     temp_dir = os.path.join(debug_dir, 'temp')
     annotate_dir = os.path.join(debug_dir, '1')
