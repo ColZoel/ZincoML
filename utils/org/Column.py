@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from PIL import Image
-from utils.org import Line
+from utils.org.Line import Line
 from utils.images import hsv_to_rgb, insertion_sort
 
 
