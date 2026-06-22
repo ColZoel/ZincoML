@@ -2,11 +2,27 @@ import pandas as pd
 import os
 from utils.dirs import subdirectories, read_any
 from spacy_llm.util import assemble
-from utils.config import load_config, llm_config, llm_examples, set_llm_examples
+from utils.config import load_config, root, set_llm_examples, set_llm_labels
+import Palmai
+import spacy
 
 unique_vars = load_config('main')['unique_vars']
-set_llm_examples(llm_config, llm_examples)
-model = assemble(llm_config)
+llm_config = os.path.join(root, 'parsing', 'config.cfg')
+set_llm_examples()
+set_llm_labels()
+nlp = assemble(llm_config)
+
+# nlp = spacy.blank("en")
+# config = {"task": {"@llm_tasks": "spacy.NER.v3", "labels": ["PERSON", "ORGANISATION", "LOCATION", "OCCUPATION", "ADDRESS"]},
+#           "model": {"@llm_models": "spacy.PaLM.v1", "name": "chat-bison-001", "config": {"temperature":0.0}}}
+# llm = nlp.add_pipe("llm", config=config)
+
+
+def set_llm():
+    set_llm_examples()
+    set_llm_labels()
+    model = assemble(llm_config)
+    return model
 
 
 def set_dict(tup):
@@ -33,16 +49,25 @@ def fill_df(info_dict, personal_vars):
 
 
 def parse(text):
-    doc = model(text)
+    text = text.replace('\n', ' ')
+    doc = nlp(text)
     results = [(ent.text, ent.label_) for ent in doc.ents]
+    print(f'Text: {text}\nResults: {results}')
     info = set_dict(results)
     info_dict = fill_df(info, unique_vars)
 
     return info_dict
 
 
+def palm(text):
+    doc = nlp(text)
+    p_doc = llm(doc)
+    results = [(ent.text, ent.label_) for ent in p_doc.ents]
+    return results
+
+
 def parse_df(df):
-    df2 = df["raw_ocr"].apply(parse)
+    df2 = df["raw_string"].apply(parse)
     df2 = pd.DataFrame(df2.tolist())
     return df2
 
@@ -75,12 +100,11 @@ def parse_image(path, year_city_type_path, output='csv'):
     :param output: output type, one of 'csv', 'parquet', or 'dta', or None. Always saves a feather. Default is 'csv'
 
     """
-    unique_vars = load_config('main')['unique_vars']
-    model = assemble("config.cfg")
     save_dir = subdirectories(year_city_type_path)[0]
     parse_dir = subdirectories(year_city_type_path)[5]
     df = read_any(path)
-    df2 = parse_df(df, model, unique_vars)
+    df = df.sample(1)
+    df2 = parse_df(df)
     df2 = df2.join(df)
     save_parse(df2, path, save_dir, parse_dir, output=output)
 
@@ -103,3 +127,7 @@ def combine_from_folder(path, year_city_type_path, output='csv'):
     save_parse(df2, path, save_dir, parse_dir, output=output)
 
     return
+
+
+# parse_image('/Users/collinzoeller/city_directories/AZ/test_out/debug/temp/2/1994_ROC_1__0188.parquet',
+#             '/Users/collinzoeller/city_directories/AZ/test')

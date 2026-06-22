@@ -102,7 +102,10 @@ def subdirectories(year_city_type_path):
     """
     if year_city_type_path[-1] == "/":
         year_city_type_path = year_city_type_path[:-1]
-    save_dir = year_city_type_path.split(".")[0] + "_out"
+    if not os.path.isdir(year_city_type_path):
+        save_dir = os.path.dirname(year_city_type_path) + "_out"
+    else:
+        save_dir = year_city_type_path + "_out"
     debug_dir = os.path.join(save_dir, 'debug')
     temp_dir = os.path.join(debug_dir, 'temp')
     annotate_dir = os.path.join(debug_dir, '1')
@@ -140,6 +143,8 @@ def read_any(path):
     """
     Reads any file type and returns a dataframe
     """
+    if isinstance(path, pd.DataFrame):
+        return path
     if path.endswith('.csv'):
         return read_csv(path)
     elif path.endswith('.feather'):
@@ -156,8 +161,6 @@ def read_any(path):
         return read_excel(path)
     elif path.endswith('.pkl'):
         return read_pickle(path)
-    elif isinstance(path, pd.DataFrame):
-        pass
     else:
         raise ValueError(f'Invalid file type: {path}')
 

@@ -9,7 +9,6 @@ palm_key = getenv("PALM_API_KEY")
 os.environ["PALM_API_KEY"] = palm_key
 
 
-# Todo: Add llm_config and llm_examples to parser module to avoid loading in multiprocesing
 root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 llm_config = os.path.join(root, 'parsing', 'config.cfg')
 llm_examples = os.path.join(root, 'parsing', 'examples.yaml')
@@ -61,14 +60,34 @@ def update(path, key, value):
         yaml.dump(config, f)
 
 
-def set_llm_examples(config, examples):
+def set_llm_examples():
     """
     Sets the LLM examples
     """
     cp = ConfigParser()
-    cp.read(config)
-    cp.set('components.llm.task.examples', 'path', str(examples))
-    with open(config, 'w') as f:
+    cp.read(llm_config)
+    cp.set('components.llm.task.examples', 'path', str(llm_examples))
+    with open(llm_config, 'w') as f:
+        cp.write(f)
+
+    return
+
+
+def set_llm_labels():
+    """
+    Sets the LLM labels and definitions in the config file from the project config file
+    """
+    labels = load_config('main')['labels']
+    definitions = load_config('main')['label_definitions']
+    cp = ConfigParser()
+    cp.optionxform = str
+    cp.read(os.path.join(root, 'parsing', 'config.cfg'))
+    cp['components.llm.task']['labels'] = f'{labels}'
+    cp['components.llm.task.label_definitions'] = {}
+    for key, value in definitions.items():
+        cp['components.llm.task.label_definitions'][f"{key}"] = f"{value}"
+
+    with open(llm_config, 'w') as f:
         cp.write(f)
 
     return

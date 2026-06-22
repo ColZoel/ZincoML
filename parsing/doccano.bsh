@@ -1,0 +1,14 @@
+# Bash for opening a doccano annotaion project in the browser
+
+pip install doccano
+
+# Initialize database. First time only.
+doccano init
+# Create a super user. First time only.
+doccano createuser --username czoeller --password test7his7hing
+
+# Start a web server. Do this every time you want to start the web server.
+doccano webserver --port 8000
+
+# when importing a dataset, press "import" on the server and then run this command in a new window (ensure in same environment as above)
+doccano task

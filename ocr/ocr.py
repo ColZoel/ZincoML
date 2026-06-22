@@ -1,6 +1,8 @@
 """
 This module contains the functions for extracting text from an image using Tesseract OCR via Tessercocr.
 """
+import os
+
 from utils.globals import header_re, pagenum
 from tools.timers import *
 from tesserocr import PyTessBaseAPI, RIL, iterate_level, PT
@@ -11,8 +13,8 @@ from multiprocessing import Pool
 from utils import images
 special_chars_regex = re.compile(r'[\-.*]')
 
-# Todo: Check word confidence maps for ellipses -- could drop really low confidence "words" that are actually ellipses
 
+# Todo: Check word confidence maps for ellipses -- could drop really low confidence "words" that are actually ellipses
 def organize_lines(api, image, debug=False):
     """
         APPLY OCR TO IMAGE AND ORGANIZES OUTPUT INTO RECORDS AND COLUMNS
@@ -197,6 +199,7 @@ def ocr_task(image_path, x, y, x2, y2):  # TODO: add timer
             return None
         short_step(timeit(), 'Save Result', 1, 3)
         ocr_dir = subdirectories(image_path)[4]
+        os.makedirs(ocr_dir, exist_ok=True)
         image_df = pd.DataFrame(lines).drop(columns=['left', 'top', 'right', 'bottom'])
         image_df.to_parquet(os.path.join(ocr_dir, f'{file_stem(image_path)}.parquet'), compression='gzip')
 
@@ -216,15 +219,43 @@ def map_ocr(annotation_boxes, cores=6):
     return dfs
 
 
-def save_aggregate(dfs, year_city_type_path):
+def save_aggregate(dfs, year_city_type_path, type="parquet"):
     """
     Saves the aggregate dataframe to parquet
     """
-    ocr_dir = subdirectories(year_city_type_path)[4]
+    ocr_dir = subdirectories(year_city_type_path)[0]
+    os.makedirs(ocr_dir, exist_ok=True)
     aggregate_df = pd.concat(dfs)
-    aggregate_df.to_parquet(os.path.join(ocr_dir,
+    if type == "parquet":
+        aggregate_df.to_parquet(os.path.join(ocr_dir,
                                          f'{file_stem(year_city_type_path)}_aggregate.parquet'), compression='gzip')
+    if type == "csv":
+        aggregate_df.to_csv(os.path.join(ocr_dir,
+                                         f'{file_stem(year_city_type_path)}_aggregate.csv'))
+    if type == "dta":
+        aggregate_df.to_csv(os.path.join(ocr_dir,
+                                         f'{file_stem(year_city_type_path)}_aggregate.dta'))
     return aggregate_df
 
 
+def aggregate_from_files(path, year_city_type_path, output='csv'):
+    """
+    Parse all images in a folder and return a dataframe with the parsed information joined with the original dataframe
+    :param path: path to folder of image parquet files
+    :param year_city_type_path: path to save directory
+    :param output: output type, one of 'csv', 'parquet', 'dta', or None. Always saves a feather. Default is 'csv'
 
+    """
+    iterable = [(file_stem(file).split("_")[0], pd.read_parquet(file)) for file in glob.glob(path + "/*.parquet")]
+    dfs = []
+    for df in iterable:
+        df[1]['year'] = df[0]
+        dfs.append(df[1])
+
+    save_aggregate(dfs, year_city_type_path, type=output)
+
+    return
+
+
+aggregate_from_files("/Volumes/CZ ROC/AZ/1980s_panal_out/debug/temp/2",
+                     "/Volumes/CZ ROC/AZ/1980s_panal", output='csv')

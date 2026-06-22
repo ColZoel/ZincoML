@@ -1,11 +1,34 @@
 
 
-input_images: /Users/collinzoeller/city_directories/AZ/test
+input_images: /Volumes/CZ ROC/AZ/1980s_panal
+
 horizontal_process: False  # Is true to run the pipeline horizontally (one image at a time: OD -> OCR -> NER)
-cores: 4  # Number of cores to use for multiprocessing
+cores: 7  # Number of cores to use for multiprocessing
 output_type: "csv"  # Output type: csv, dta, parquet or None. If None, only a feather file is saved
 debug: False  # Is true to run in debug mode
-unique_vars:
+ParseText: False  # experimental, = false to not parse text. Only does segmentation
+
+labels:
+  - PERSON
+  - ORGANIZATION
+  - ADDRESS
+  - POSITION
+  - OCCUPATION
+  - TELEPHONE
+  - MILITARY BRANCH
+
+label_definitions:
+  PERSON: 'first and last name of a person and may include titles such as Mr., Mrs., or Jr. or a leading quotation "'
+  ORGANIZATION: 'name of an organization or business and can include a leading quotation "'
+  ADDRESS: 'street address as well as any state, city, zip or other location information. 
+  May include a prefix h or r, e.g., h123 Main St, r123 Main St or 123 Main St'
+  POSITION: "a job position, which can be abbreviated, e.g., President, emp, stdt, rtd, ofc sec, etc."
+  OCCUPATION: 'type of job held by the person, usually the industry or field of work'
+  TELEPHONE: 'a phone number with no areacode, e.g., 123-4567 or 1234567.'
+  MILITARY BRANCH: 'abbreviated branch of the military, if any. e.g., USA, USMC, USN, USCG, USAF'
+
+
+unique_vars: # Variables that should change for each person in a household
   - "POSITION"
   - "OCCUPATION"
   - "MILITARY BRANCH"
